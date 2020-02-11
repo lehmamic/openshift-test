@@ -1,9 +1,9 @@
 node {
     stage("build") {
-        sh 'dotnet build'
+        echo 'dotnet build'
     }
 
     state("test") {
-        sh 'dotnet test'
+        echo 'dotnet test'
     }
 }
