@@ -46,3 +46,9 @@ spec:
 ```bash
 oc create -f openshift/pipeline/pipeline.buildconfig.yml
 ```
+
+### Start a build
+
+```bash
+oc start-build devops-fusion-sample-pipeline
+```
