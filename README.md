@@ -11,12 +11,14 @@ Create a public git repository, e.g. on github. It also work with private reposi
 Create a file `jenkinsfile.groovie`.
 
 ```Groovy
-stage("build") {
-    sh 'dotnet build'
-}
+node {
+    stage("build") {
+        sh 'dotnet build'
+    }
 
-state("test") {
-    sh 'dotnet test'
+    state("test") {
+        sh 'dotnet test'
+    }
 }
 ```
 
@@ -42,5 +44,5 @@ spec:
 ### Create the Jenkins Pipeline Build Config Object in OpenShift
 
 ```bash
-oc create -f openshift/pipeline/pipeline.buildconfig.yaml
+oc create -f openshift/pipeline/pipeline.buildconfig.yml
 ```

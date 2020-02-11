@@ -1,7 +1,9 @@
-stage("build") {
-    sh 'dotnet build'
-}
+node {
+    stage("build") {
+        sh 'dotnet build'
+    }
 
-state("test") {
-    sh 'dotnet test'
+    state("test") {
+        sh 'dotnet test'
+    }
 }
