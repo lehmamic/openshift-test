@@ -2,10 +2,9 @@ String label = "worker-${UUID.randomUUID().toString()}"
 
 podTemplate(label: label,
         cloud: "openshift",
-        // inheritFrom: "jenkins-slave-nodejs-8-rhel7",
         containers: [
                 containerTemplate(
-                        name: "dotnet-3.1",
+                        name: "dotnet31",
                         image: "registry.access.redhat.com/dotnet/dotnet-31-jenkins-slaverhel7:latest",
                         alwaysPullImage: true,
                         resourceRequestMemory: "2Gi",
@@ -18,7 +17,7 @@ podTemplate(label: label,
         ],
         volumes: []
 ) {
-    node("dotnet-3.1") {
+    node("dotnet31") {
         stage("build") {
             echo 'dotnet build'
         }
