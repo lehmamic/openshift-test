@@ -4,7 +4,7 @@ podTemplate(label: label,
         cloud: "openshift",
         containers: [
                 containerTemplate(
-                        name: "dotnet31",
+                        name: "dotnetcore",
                         image: "registry.access.redhat.com/dotnet/dotnet-31-jenkins-slaverhel7:latest",
                         alwaysPullImage: true,
                         resourceRequestMemory: "2Gi",
@@ -17,7 +17,7 @@ podTemplate(label: label,
         ],
         volumes: []
 ) {
-    node("dotnet31") {
+    node("label") {
         stage("build") {
             echo 'dotnet build'
         }
