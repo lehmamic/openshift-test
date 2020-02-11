@@ -16,7 +16,7 @@ node {
         echo 'dotnet build'
     }
 
-    state("test") {
+    stage("test") {
         echo 'dotnet test'
     }
 }
