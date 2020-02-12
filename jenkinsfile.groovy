@@ -14,6 +14,10 @@ podTemplate(label: "dotnet-31",
             ])
           ]) {
     node("dotnet-31") {
+        stage("checkout") {
+          sh 'printenv'
+        }
+
         stage("build") {
             echo 'dotnet build'
         }
