@@ -1,5 +1,17 @@
 def gitVersionProperties;
 
+def loadProperties(path) {
+    properties = new Properties()
+    File propertiesFile = new File(path)
+    properties.load(propertiesFile.newDataInputStream())
+    Set<Object> keys = properties.keySet();
+    for(Object k:keys){
+    String key = (String)k;
+    String value =(String) properties.getProperty(key)
+    env."${key}" = "${value}"
+    }
+}
+
 podTemplate(label: "dotnet-31",
                     cloud: "openshift",
                     inheritFrom: "maven",
@@ -27,24 +39,21 @@ podTemplate(label: "dotnet-31",
         stage("gitversion") {
             sh 'dotnet tool install --global GitVersion.Tool --version 5.1.3'
             sh 'dotnet-gitversion /output buildserver'
-            sh 'cat gitversion.properties'
-            def file = readFile "gitversion.properties"
-            gitVersionProperties = file.split('\n');
+
+            loadProperties 'gitversion.properties'
         }
 
-        withEnv(gitVersionProperties) {
-            stage("restore") {
-                sh 'printenv'
-                sh 'dotnet restore src/Zuehlke.OpenShiftDemo.sln'
-            }
+        stage("restore") {
+            sh 'printenv'
+            sh 'dotnet restore src/Zuehlke.OpenShiftDemo.sln'
+        }
 
-            stage("build") {
-                sh 'dotnet build src/Zuehlke.OpenShiftDemo.sln -c Release --no-restore'
-            }
+        stage("build") {
+            sh 'dotnet build src/Zuehlke.OpenShiftDemo.sln -c Release --no-restore'
+        }
 
-            stage("publish") {
-                sh 'dotnet publish src/Zuehlke.OpenShiftDemo/Zuehlke.OpenShiftDemo.csproj -c Release -o ./app/publish --no-restore --no-build'
-            }
+        stage("publish") {
+            sh 'dotnet publish src/Zuehlke.OpenShiftDemo/Zuehlke.OpenShiftDemo.csproj -c Release -o ./app/publish --no-restore --no-build'
         }
     }
 }
