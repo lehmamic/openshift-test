@@ -19,8 +19,16 @@ podTemplate(label: "dotnet-31",
           git(${GIT_REPO}, ${GIT_BRANCH})
         }
 
+        stage("restore") {
+            sh 'dotnet restore rc/Zuehlke.OpenShiftDemo.sln'
+        }
+
         stage("build") {
-            echo 'dotnet build'
+            sh 'dotnet build src/Zuehlke.OpenShiftDemo.sln -c Release --no-restore'
+        }
+
+        stage("publich") {
+            sh 'dotnet publish src/Zuehlke.OpenShiftDemo/Zuehlke.OpenShiftDemo.csproj -c Release -o ./app/publish --no-restore --no-build'
         }
 
         stage("test") {
