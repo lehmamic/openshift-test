@@ -1,6 +1,6 @@
 podTemplate(label: "dotnet-31", 
                     cloud: "openshift", 
-//                    inheritFrom: "maven", 
+                    inheritFrom: "maven", 
                     containers: [
             containerTemplate(name: "jnlp", 
                               image: "registry.redhat.io/dotnet/dotnet-31-jenkins-agent-rhel7:latest", 
