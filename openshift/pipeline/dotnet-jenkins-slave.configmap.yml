@@ -9,7 +9,6 @@ data:
     <org.csanchez.jenkins.plugins.kubernetes.PodTemplate>
       <inheritFrom></inheritFrom>
       <name>dotnet-31</name>
-      <instanceCap>2247483647</instanceCap>
       <idleMinutes>0</idleMinutes>
       <label>dotnet-31</label>
       <serviceAccount>jenkins</serviceAccount>
@@ -18,7 +17,7 @@ data:
       <containers>
         <org.csanchez.jenkins.plugins.kubernetes.ContainerTemplate>
           <name>jnlp</name>
-          <image>registry.access.redhat.com/dotnet/dotnet-31-jenkins-slave-rhel7:latest</image>
+          <image>registry.redhat.io/dotnet/dotnet-31-jenkins-agent-rhel7:latest</image>
           <privileged>false</privileged>
           <alwaysPullImage>true</alwaysPullImage>
           <workingDir>/tmp</workingDir>
