@@ -23,7 +23,7 @@ podTemplate(label: "dotnet-31",
         }
 
         stage("restore") {
-            sh 'dotnet restore rc/Zuehlke.OpenShiftDemo.sln'
+            sh 'dotnet restore src/Zuehlke.OpenShiftDemo.sln'
         }
 
         stage("build") {
