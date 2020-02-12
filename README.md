@@ -52,3 +52,35 @@ oc create -f openshift/pipeline/pipeline.buildconfig.yml
 ```bash
 oc start-build devops-fusion-sample-pipeline
 ```
+
+## Setup Pod Template
+
+The Kubernetes Jenkins Plugin DSL allows us to define a pod template in the jenkins file.
+
+```Groovy
+podTemplate(label: "dotnet-31",
+                    cloud: "openshift",
+                    inheritFrom: "maven",
+                    containers: [
+            containerTemplate(name: "jnlp",
+                              image: "registry.redhat.io/dotnet/dotnet-31-jenkins-agent-rhel7:latest",
+                              resourceRequestMemory: "512Mi",
+                              resourceLimitMemory: "512Mi",
+                              resourceRequestCpu: "500m",
+                              resourceLimitCpu: "2",
+                              ttyEnabled: true,
+                              envVars: [
+              envVar(key: "CONTAINER_HEAP_PERCENT", value: "0.25")
+            ])
+          ]) {
+    node("dotnet-31") {
+        stage("build") {
+            echo 'dotnet build'
+        }
+
+        stage("test") {
+            echo 'dotnet test'
+        }
+    }
+}
+```
