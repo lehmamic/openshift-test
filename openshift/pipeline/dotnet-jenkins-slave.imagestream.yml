@@ -1,0 +1,10 @@
+kind: ImageStream
+apiVersion: v1
+metadata:
+  name: dotnet-jenkins-slave
+  labels:
+    role: jenkins-slave
+  annotations:
+    openshift.io/image.insecureRepository: "true"
+  spec:
+    dockerImageRepository: registry.access.redhat.com/dotnet/dotnet-31-jenkins-slaverhel7:latest

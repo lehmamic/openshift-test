@@ -5,7 +5,7 @@ podTemplate(label: label,
         containers: [
                 containerTemplate(
                         name: "dotnetcore",
-                        image: "registry.access.redhat.com/dotnet/dotnet-31-jenkins-slaverhel7:latest",
+                        image: "image-registry.openshift-image-registry.svc:5000/devopsfusionleh/dotnet-jenkins-slave",
                         alwaysPullImage: true,
                         resourceRequestMemory: "2Gi",
                         resourceRequestCpu: "500m",
