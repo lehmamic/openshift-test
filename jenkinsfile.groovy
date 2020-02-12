@@ -16,7 +16,10 @@ podTemplate(label: "dotnet-31",
     node("dotnet-31") {
         stage("checkout") {
           sh 'printenv'
-          git url:"${GIT_REPO}" branch:"${GIT_BRANCH}")
+          git([
+              url:"${GIT_REPO}",
+              branch:"${GIT_BRANCH}"
+          ]) 
         }
 
         stage("restore") {
