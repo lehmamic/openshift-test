@@ -16,6 +16,7 @@ podTemplate(label: "dotnet-31",
     node("dotnet-31") {
         stage("checkout") {
           sh 'printenv'
+          git(${GIT_REPO}, ${GIT_BRANCH})
         }
 
         stage("build") {

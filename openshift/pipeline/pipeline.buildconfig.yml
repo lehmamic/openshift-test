@@ -9,4 +9,9 @@ spec:
   strategy:
     jenkinsPipelineStrategy:
       jenkinsfilePath: jenkinsfile.groovy
+      env:
+      - name: "GIT_REPO"
+        value: "https://github.com/lehmamic/openshift-test"
+      - name: "GIT_BRANCH"
+        value: "master"
     type: JenkinsPipeline
