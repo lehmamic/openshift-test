@@ -41,6 +41,7 @@ podTemplate(label: "dotnet-31",
             sh 'dotnet-gitversion /output buildserver'
 
             loadProperties 'gitversion.properties'
+            sh 'printenv'
         }
 
         stage("restore") {
