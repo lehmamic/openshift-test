@@ -7,4 +7,4 @@ metadata:
   annotations:
     openshift.io/image.insecureRepository: "true"
   spec:
-    dockerImageRepository: registry.access.redhat.com/dotnet/dotnet-31-jenkins-slaverhel7:latest
+    dockerImageRepository: registry.redhat.io/dotnet/dotnet-31-jenkins-agent-rhel7

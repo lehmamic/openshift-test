@@ -1,7 +1,7 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: dotnet-jenkins-slave-22
+  name: dotnet-jenkins-slave-31
   labels:
     role: jenkins-slave
 data:
