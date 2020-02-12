@@ -24,7 +24,7 @@ podTemplate(label: "dotnet-31",
 
         stage("gitversion") {
             sh 'dotnet tool install --global GitVersion.Tool --version 5.1.3'
-            sh 'dotnet-gitversion /output buildserver
+            sh 'dotnet-gitversion /output buildserver'
         }
 
         stage("restore") {
