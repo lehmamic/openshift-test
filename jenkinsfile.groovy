@@ -37,21 +37,20 @@ podTemplate(label: "dotnet-31",
             sh 'dotnet tool install --global GitVersion.Tool --version 5.1.3'
             sh 'dotnet-gitversion /output buildserver'
 
+            sh 'cat gitversion.properties'
             loadEnvironmentVariables 'gitversion.properties'
-            sh 'printenv'
         }
 
         stage("restore") {
-            sh 'printenv'
             sh 'dotnet restore src/Zuehlke.OpenShiftDemo.sln'
         }
 
         stage("build") {
-            sh 'dotnet build src/Zuehlke.OpenShiftDemo.sln -c Release --no-restore'
+            sh 'dotnet build src/Zuehlke.OpenShiftDemo.sln -c Release --no-restore /p:AssemblyVersion=${GitVersion_AssemblySemVer} /p:FileVersion=${GitVersion_AssemblySemFileVer} /p:InformationalVersion=${GitVersion_InformationalVersion}'
         }
 
         stage("publish") {
-            sh 'dotnet publish src/Zuehlke.OpenShiftDemo/Zuehlke.OpenShiftDemo.csproj -c Release -o ./app/publish --no-restore --no-build'
+            sh 'dotnet publish src/Zuehlke.OpenShiftDemo/Zuehlke.OpenShiftDemo.csproj -c Release -o ./app/publish --no-restore --no-build /p:AssemblyVersion=${GitVersion_AssemblySemVer} /p:FileVersion=${GitVersion_AssemblySemFileVer} /p:InformationalVersion=${GitVersion_InformationalVersion}'
         }
     }
 }
