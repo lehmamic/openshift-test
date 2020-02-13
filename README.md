@@ -93,6 +93,17 @@ podTemplate(label: "dotnet-31",
 ## Git clone and build the app
 
 ```groovy
+def gitVersionProperties;
+
+def loadEnvironmentVariables(path){
+    def props = readProperties  file: path
+    keys= props.keySet()
+    for(key in keys) {
+        value = props["${key}"]
+        env."${key}" = "${value}"
+    }
+}
+
 podTemplate(label: "dotnet-31",
                     cloud: "openshift",
                     inheritFrom: "maven",
@@ -114,7 +125,15 @@ podTemplate(label: "dotnet-31",
           git([
               url:"${GIT_REPO}",
               branch:"${GIT_BRANCH}"
-          ]) 
+          ])
+        }
+
+        stage("gitversion") {
+            sh 'dotnet tool install --global GitVersion.Tool --version 5.1.3'
+            sh 'dotnet-gitversion /output buildserver'
+
+            sh 'cat gitversion.properties'
+            loadEnvironmentVariables 'gitversion.properties'
         }
 
         stage("restore") {
@@ -122,11 +141,11 @@ podTemplate(label: "dotnet-31",
         }
 
         stage("build") {
-            sh 'dotnet build src/Zuehlke.OpenShiftDemo.sln -c Release --no-restore'
+            sh 'dotnet build src/Zuehlke.OpenShiftDemo.sln -c Release --no-restore /p:AssemblyVersion=${GitVersion_AssemblySemVer} /p:FileVersion=${GitVersion_AssemblySemFileVer} /p:InformationalVersion=${GitVersion_InformationalVersion}'
         }
 
         stage("publish") {
-            sh 'dotnet publish src/Zuehlke.OpenShiftDemo/Zuehlke.OpenShiftDemo.csproj -c Release -o ./app/publish --no-restore --no-build'
+            sh 'dotnet publish src/Zuehlke.OpenShiftDemo/Zuehlke.OpenShiftDemo.csproj -c Release -o ./app/publish --no-restore --no-build /p:AssemblyVersion=${GitVersion_AssemblySemVer} /p:FileVersion=${GitVersion_AssemblySemFileVer} /p:InformationalVersion=${GitVersion_InformationalVersion}'
         }
     }
 }
