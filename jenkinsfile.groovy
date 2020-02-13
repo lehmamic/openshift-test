@@ -1,14 +1,11 @@
 def gitVersionProperties;
 
-def loadProperties(path) {
-    properties = new Properties()
-    File propertiesFile = new File(path)
-    properties.load(propertiesFile.newDataInputStream())
-    Set<Object> keys = properties.keySet();
-    for(Object k:keys){
-    String key = (String)k;
-    String value =(String) properties.getProperty(key)
-    env."${key}" = "${value}"
+def loadEnvironmentVariables(path){
+    def props = readProperties  file: path
+    keys= props.keySet()
+    for(key in keys) {
+        value = props["${key}"]
+        env."${key}" = "${value}"
     }
 }
 
@@ -40,7 +37,7 @@ podTemplate(label: "dotnet-31",
             sh 'dotnet tool install --global GitVersion.Tool --version 5.1.3'
             sh 'dotnet-gitversion /output buildserver'
 
-            loadProperties 'gitversion.properties'
+            loadEnvironmentVariables 'gitversion.properties'
             sh 'printenv'
         }
 
