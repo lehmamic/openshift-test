@@ -62,7 +62,7 @@ podTemplate(label: "dotnet-31",
                     def objects = openshift.process("-f", "openshift/docker-build/app-docker.template.yml", "-p", "DOCKER_IMAGE_TAG=${artefactVersion}")
                     openshift.apply(objects, "--force")
 
-                    openshift.selector("bc", "demo-app-docker").startBuild("--from-file=demo-app-${artefactVersion}.zip", "--wait")
+                    openshift.selector("bc", "demo-app-docker").startBuild("--from-archive=demo-app-${artefactVersion}.zip", "--wait")
                 }
             }
         }
