@@ -17,6 +17,8 @@ objects:
       app: demo-app-docker
     name: demo-app-docker
   spec:
+    source:
+      type: binary
     output:
       to:
         kind: DockerImage
