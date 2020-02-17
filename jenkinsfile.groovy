@@ -1,4 +1,5 @@
 def gitVersionProperties;
+def artefactVersion;
 
 def loadEnvironmentVariables(path){
     def props = readProperties  file: path
@@ -39,18 +40,31 @@ podTemplate(label: "dotnet-31",
 
             sh 'cat gitversion.properties'
             loadEnvironmentVariables 'gitversion.properties'
+            artefactVersion = "${GitVersion_SemVer}-${GitVersion_ShortSha}";
         }
 
-        stage("restore") {
+        stage("dotnet restore") {
             sh 'dotnet restore src/Zuehlke.OpenShiftDemo.sln'
         }
 
-        stage("build") {
+        stage("dotnet build") {
             sh 'dotnet build src/Zuehlke.OpenShiftDemo.sln -c Release --no-restore /p:AssemblyVersion=${GitVersion_AssemblySemVer} /p:FileVersion=${GitVersion_AssemblySemFileVer} /p:InformationalVersion=${GitVersion_InformationalVersion}'
         }
 
-        stage("publish") {
-            sh 'dotnet publish src/Zuehlke.OpenShiftDemo/Zuehlke.OpenShiftDemo.csproj -c Release -o ./app/publish --no-restore --no-build /p:AssemblyVersion=${GitVersion_AssemblySemVer} /p:FileVersion=${GitVersion_AssemblySemFileVer} /p:InformationalVersion=${GitVersion_InformationalVersion}'
+        stage("dotnet publish") {
+            sh 'dotnet publish src/Zuehlke.OpenShiftDemo/Zuehlke.OpenShiftDemo.csproj -c Release -o ./artifacts/app/publish --no-restore --no-build /p:AssemblyVersion=${GitVersion_AssemblySemVer} /p:FileVersion=${GitVersion_AssemblySemFileVer} /p:InformationalVersion=${GitVersion_InformationalVersion}'
+            zip zipFile: "demo-app-${artefactVersion}.zip", archive: true, dir: "/artifacts", glob: "**/*.*"
+        }
+
+        stage("docker build") {
+            openshift.withCluster() {
+                openshift.withProject() {
+                    def objects = openshift.process("-f", "openshift/docker-build/app-docker.template.yml", "-p", "DOCKER_IMAGE_TAG=${artefactVersion}")
+                    openshift.apply(objects, "--force")
+
+                    openshift.selector("bc", "demo-app-docker").startBuild("--from-file=demo-app-${artefactVersion}.zip", "--wait")
+                }
+            }
         }
     }
 }

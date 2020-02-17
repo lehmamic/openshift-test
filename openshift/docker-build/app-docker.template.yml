@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Template
+metadata:
+  labels:
+    app: demo-app-docker
+  name: demo-app-docker
+parameters:
+- name: DOCKER_IMAGE_TAG
+  required: true
+
+objects:
+
+- apiVersion: build.openshift.io/v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      app: demo-app-docker
+    name: demo-app-docker
+  spec:
+    output:
+      to:
+        kind: DockerImage
+        name: image-registry.openshift-image-registry.svc:5000/${APP_NAME}:${DOCKER_IMAGE_TAG}
+    runPolicy: Parallel
+    strategy:
+      dockerStrategy:
+        dockerfilePath: Dockerfile
+      type: Docker
