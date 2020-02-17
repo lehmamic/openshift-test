@@ -53,7 +53,7 @@ podTemplate(label: "dotnet-31",
 
         stage("dotnet publish") {
             sh 'dotnet publish src/Zuehlke.OpenShiftDemo/Zuehlke.OpenShiftDemo.csproj -c Release -o ./artifacts/app/publish --no-restore --no-build /p:AssemblyVersion=${GitVersion_AssemblySemVer} /p:FileVersion=${GitVersion_AssemblySemFileVer} /p:InformationalVersion=${GitVersion_InformationalVersion}'
-            zip zipFile: "demo-app-${artefactVersion}.zip", archive: true, dir: "/artifacts", glob: "**/*.*"
+            zip zipFile: "demo-app-${artefactVersion}.zip", archive: true, dir: "./artifacts", glob: "**/*.*"
         }
 
         stage("docker build") {
