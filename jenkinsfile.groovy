@@ -14,17 +14,20 @@ podTemplate(label: "dotnet-31",
                     cloud: "openshift",
                     inheritFrom: "maven",
                     containers: [
-            containerTemplate(name: "jnlp",
-                              image: "registry.redhat.io/dotnet/dotnet-31-jenkins-agent-rhel7:latest",
-                              resourceRequestMemory: "512Mi",
-                              resourceLimitMemory: "512Mi",
-                              resourceRequestCpu: "500m",
-                              resourceLimitCpu: "2",
-                              ttyEnabled: true,
-                              envVars: [
-              envVar(key: "CONTAINER_HEAP_PERCENT", value: "0.25")
-            ])
-          ]) {
+                        containerTemplate(name: "jnlp",
+                                        image: "registry.redhat.io/dotnet/dotnet-31-jenkins-agent-rhel7:latest",
+                                        resourceRequestMemory: "512Mi",
+                                        resourceLimitMemory: "512Mi",
+                                        resourceRequestCpu: "500m",
+                                        resourceLimitCpu: "2",
+                                        ttyEnabled: true,
+                                        envVars: [
+                        envVar(key: "CONTAINER_HEAP_PERCENT", value: "0.25")
+                        ])
+                    ],
+                    volumes: [
+                        hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')
+                    ]) {
     node("dotnet-31") {
         stage("checkout") {
           sh 'printenv'
