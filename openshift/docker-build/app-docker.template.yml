@@ -25,6 +25,10 @@ objects:
         kind: DockerImage
         name: image-registry.openshift-image-registry.svc:5000/devopsfusionleh/demo-app:${DOCKER_IMAGE_TAG}
     runPolicy: Parallel
+    resources:
+      limits:
+        cpu: 400m
+        memory: 0.5Gi
     strategy:
       sourceStrategy:
         from:
