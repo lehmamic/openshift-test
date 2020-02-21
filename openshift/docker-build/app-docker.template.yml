@@ -32,4 +32,7 @@ objects:
           name: registry.redhat.io/dotnet/dotnet-31-rhel7
         pullSecret:
           name: image-pull-secret
+        env:
+        - name: "DISABLE_ASSET_COMPILATION"
+          value: "true"
       type: Source
