@@ -29,8 +29,6 @@ objects:
       to:
         kind: DockerImage
         name: image-registry.openshift-image-registry.svc:5000/${OPENSHIFT_NAMESPACE}:1.0.0.0
-        pushSecret:
-          name: image-pull-secret
     runPolicy: Parallel
     strategy:
       sourceStrategy:
