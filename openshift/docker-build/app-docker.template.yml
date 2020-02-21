@@ -29,5 +29,5 @@ objects:
       sourceStrategy:
         from:
           kind: DockerImage
-          name: registry.redhat.io/rhel8/dotnet-31
+          name: registry.redhat.io/dotnet/dotnet-31-rhel7
       type: Source
