@@ -11,65 +11,21 @@ parameters:
 
 objects:
 
-- kind: DeploymentConfig
-  apiVersion: apps.openshift.io/v1
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
   metadata:
-    creationTimestamp: null
-    labels:
-      app: demo-app
     name: demo-app
   spec:
-    replicas: 1
     selector:
-      deploymentconfig: demo-app
+      app: demo-app
+    replicas: 1
+    template:
+      metadata:
+        labels:
+          app: demo-app
       spec:
         containers:
+          - name: demo-app
             image: image-registry.openshift-image-registry.svc:5000/devopsfusionleh/demo-app:${DOCKER_IMAGE_TAG}
-            imagePullPolicy: Always
-            name: demo-app
             ports:
               - containerPort: 80
-                protocol: TCP
-        dnsPolicy: ClusterFirst
-        restartPolicy: Always
-        schedulerName: default-scheduler
-        terminationGracePeriodSeconds: 30
-    strategy:
-      type: Rolling 
-
-- apiVersion: v1
-  kind: Service
-  metadata:
-    creationTimestamp: null
-    labels:
-      app: demo-app
-    name: demo-app
-  spec:
-    ports:
-      - name: 80-tcp
-        port: 80
-        protocol: TCP
-        targetPort: 80
-    selector:
-      deploymentconfig: demo-app
-    sessionAffinity: None
-    type: ClusterIP
-
-- apiVersion: v1
-  kind: Route
-  metadata:
-    annotations:
-      haproxy.router.openshift.io/timeout: 60000ms
-    creationTimestamp: null
-    haproxy.router.openshift.io/timeout: 60000ms
-    labels:
-      app: demo-app
-    name: demo-app
-  spec:
-    port:
-      targetPort: 80-tcp
-    tls:
-      termination: edge
-    to:
-      kind: Service
-      name: demo-app
