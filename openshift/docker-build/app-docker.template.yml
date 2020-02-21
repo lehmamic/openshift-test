@@ -28,7 +28,7 @@ objects:
     output:
       to:
         kind: DockerImage
-        name: image-registry.openshift-image-registry.svc:5000/${OPENSHIFT_NAMESPACE}:1.0.0.0
+        name: image-registry.openshift-image-registry.svc:5000/$(OPENSHIFT_NAMESPACE):1.0.0.0
     runPolicy: Parallel
     strategy:
       sourceStrategy:
