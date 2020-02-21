@@ -27,7 +27,7 @@ objects:
           - name: demo-app
             image: image-registry.openshift-image-registry.svc:5000/devopsfusionleh/demo-app:${DOCKER_IMAGE_TAG}
             ports:
-              - containerPort: 80
+              - containerPort: 8080
             resources:
               limits:
                 cpu: 400m
@@ -42,6 +42,24 @@ objects:
       app: demo-app
     ports:
       - protocol: TCP
-        port: 80
-        targetPort: 80
+        port: 8080
+        targetPort: 8080
     type: ClusterIP
+
+- kind: Route
+  apiVersion: route.openshift.io/v1
+  metadata:
+    name: demo-app
+    labels:
+      app: demo-app
+  spec:
+    host: demo-app-devopsfusionleh.apps.us-west-1.starter.openshift-online.com
+    to:
+      kind: Service
+      name: demo-app
+    port:
+      targetPort: 8080
+    tls:
+      termination: edge
+      insecureEdgeTerminationPolicy: Redirect
+
