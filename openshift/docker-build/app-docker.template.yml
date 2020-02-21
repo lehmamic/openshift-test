@@ -33,6 +33,6 @@ objects:
         pullSecret:
           name: image-pull-secret
         env:
-        - name: "DISABLE_ASSET_COMPILATION"
-          value: "true"
+        - name: DOTNET_STARTUP_ASSEMBLY
+          value: app/publish/Zuehlke.OpenShiftDemo.dll
       type: Source
