@@ -2,12 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CorrelationId;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
+using Serilog.Context;
 
 namespace Zuehlke.OpenShiftDemo
 {
@@ -24,11 +27,18 @@ namespace Zuehlke.OpenShiftDemo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddCorrelationId();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCorrelationId(new CorrelationIdOptions
+            {
+                UseGuidForCorrelationId = true,
+                IncludeInResponse = true,
+            });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -36,10 +46,21 @@ namespace Zuehlke.OpenShiftDemo
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
             }
-            app.UseHttpsRedirection();
+
+            app.UseSerilogRequestLogging();
+            app.Use(async (context, next) =>
+            {
+                var headers = context.Request.Headers.ToDictionary(
+                    i => i.Key,
+                    i => i.Value);
+
+                using (LogContext.PushProperty("RequestHeaders", headers))
+                {
+                    await next();
+                }
+            });
+
             app.UseStaticFiles();
 
             app.UseRouting();
