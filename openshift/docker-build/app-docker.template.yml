@@ -17,13 +17,18 @@ objects:
       app: demo-app-docker
     name: demo-app-docker
   spec:
+    env:
+    - name: OPENSHIFT_NAMESPACE
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
     source:
       contextDir: .
       type: Binary
     output:
       to:
         kind: DockerImage
-        name: image-registry.openshift-image-registry.svc:5000/demo-app:1.0.0.0
+        name: image-registry.openshift-image-registry.svc:5000/${OPENSHIFT_NAMESPACE}:1.0.0.0
         pushSecret:
           name: image-pull-secret
     runPolicy: Parallel
