@@ -61,7 +61,6 @@ podTemplate(label: "dotnet-31",
         }
 
         stage("docker build") {
-            sh 'docker ps'
             openshift.withCluster() {
                 openshift.withProject() {
                     def objects = openshift.process("-f", "openshift/docker-build/app-docker.template.yml", "-p", "DOCKER_IMAGE_TAG=${artefactVersion}")
