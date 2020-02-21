@@ -28,6 +28,10 @@ objects:
             image: image-registry.openshift-image-registry.svc:5000/devopsfusionleh/demo-app:${DOCKER_IMAGE_TAG}
             ports:
               - containerPort: 80
+            resources:
+              limits:
+                cpu: 400m
+                memory: 256Mi
 
 - apiVersion: v1
   kind: Service

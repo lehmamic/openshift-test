@@ -16,8 +16,6 @@ podTemplate(label: "dotnet-31",
             containers: [
                 containerTemplate(name: "jnlp",
                                 image: "registry.redhat.io/dotnet/dotnet-31-jenkins-agent-rhel7:latest",
-                                resourceLimitMemory: "0.5Gi",
-                                resourceLimitCpu: "400m",
                                 ttyEnabled: true,
                                 envVars: [
                                     envVar(key: "CONTAINER_HEAP_PERCENT", value: "0.25")

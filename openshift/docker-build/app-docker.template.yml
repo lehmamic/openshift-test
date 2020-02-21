@@ -28,7 +28,7 @@ objects:
     resources:
       limits:
         cpu: 400m
-        memory: 0.5Gi
+        memory: 256Mi
     strategy:
       sourceStrategy:
         from:
