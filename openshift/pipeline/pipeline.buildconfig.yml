@@ -6,6 +6,7 @@ spec:
   source:
     git:
       uri: "https://github.com/lehmamic/openshift-test"
+      ref: master
   strategy:
     jenkinsPipelineStrategy:
       jenkinsfilePath: jenkinsfile.groovy

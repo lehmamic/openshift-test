@@ -11,26 +11,27 @@ def loadEnvironmentVariables(path){
 }
 
 podTemplate(label: "dotnet-31",
-                    cloud: "openshift",
-                    inheritFrom: "maven",
-                    containers: [
-                        containerTemplate(name: "jnlp",
-                                        image: "registry.redhat.io/dotnet/dotnet-31-jenkins-agent-rhel7:latest",
-                                        resourceRequestMemory: "512Mi",
-                                        resourceLimitMemory: "512Mi",
-                                        resourceRequestCpu: "500m",
-                                        resourceLimitCpu: "2",
-                                        ttyEnabled: true,
-                                        envVars: [
-                        envVar(key: "CONTAINER_HEAP_PERCENT", value: "0.25")
-                        ])
-                    ],
-                    volumes: [
-                        hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')
-                    ]) {
+            cloud: "openshift",
+            inheritFrom: "maven",
+            containers: [
+                containerTemplate(name: "jnlp",
+                                image: "registry.redhat.io/dotnet/dotnet-31-jenkins-agent-rhel7:latest",
+                                resourceRequestMemory: "512Mi",
+                                resourceLimitMemory: "512Mi",
+                                resourceRequestCpu: "500m",
+                                resourceLimitCpu: "2",
+                                ttyEnabled: true,
+                                envVars: [
+                                    envVar(key: "CONTAINER_HEAP_PERCENT", value: "0.25")
+                                ])
+            ],
+            volumes: [
+                // hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')
+            ]) {
     node("dotnet-31") {
         stage("checkout") {
           sh 'printenv'
+          // checkout scr
           git([
               url:"${GIT_REPO}",
               branch:"${GIT_BRANCH}"
@@ -61,14 +62,14 @@ podTemplate(label: "dotnet-31",
 
         stage("docker build") {
             sh 'docker ps'
-            // openshift.withCluster() {
-            //     openshift.withProject() {
-            //         def objects = openshift.process("-f", "openshift/docker-build/app-docker.template.yml", "-p", "DOCKER_IMAGE_TAG=${artefactVersion}")
-            //         openshift.apply(objects, "--force")
+            openshift.withCluster() {
+                openshift.withProject() {
+                    def objects = openshift.process("-f", "openshift/docker-build/app-docker.template.yml", "-p", "DOCKER_IMAGE_TAG=${artefactVersion}")
+                    openshift.apply(objects, "--force")
 
-            //         openshift.selector("bc", "demo-app-docker").startBuild("--from-archive=demo-app-${artefactVersion}.zip", "--wait")
-            //     }
-            // }
+                    openshift.selector("bc", "demo-app-docker").startBuild("--from-archive=demo-app-${artefactVersion}.zip", "--wait")
+                }
+            }
         }
     }
 }

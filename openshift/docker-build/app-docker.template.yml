@@ -23,9 +23,11 @@ objects:
     output:
       to:
         kind: DockerImage
-        name: image-registry.openshift-image-registry.svc:5000/demo-app:${DOCKER_IMAGE_TAG}
+        name: image-registry.openshift-image-registry.svc:5000/demo-app:1.0.0.0
     runPolicy: Parallel
     strategy:
-      dockerStrategy:
-        dockerfilePath: Dockerfile
-      type: Docker
+      sourceStrategy:
+        from:
+          kind: DockerImage
+          name: registry.access.redhat.com/dotnet/dotnetcore-11-rhel7
+      type: Source
