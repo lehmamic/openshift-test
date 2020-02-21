@@ -29,5 +29,7 @@ objects:
       sourceStrategy:
         from:
           kind: DockerImage
-          name: dotnet-31-rhel7
+          name: registry.redhat.io/dotnet/dotnet-31-rhel7
+        pullSecret:
+          name: image-pull-secret
       type: Source
