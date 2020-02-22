@@ -28,6 +28,8 @@ objects:
             image: image-registry.openshift-image-registry.svc:5000/devopsfusionleh/demo-app:${DOCKER_IMAGE_TAG}
             ports:
               - containerPort: 8080
+            env:
+              - ASPNETCORE_ENVIRONMENT=Production
             resources:
               limits:
                 cpu: 400m
