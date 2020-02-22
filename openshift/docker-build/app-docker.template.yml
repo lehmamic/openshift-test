@@ -38,5 +38,5 @@ objects:
           name: image-pull-secret
         env:
         - name: DOTNET_STARTUP_ASSEMBLY
-          value: app/publish/Zuehlke.OpenShiftDemo.dll
+          value: Zuehlke.OpenShiftDemo.dll
       type: Source
