@@ -29,7 +29,8 @@ objects:
             ports:
               - containerPort: 8080
             env:
-              - ASPNETCORE_ENVIRONMENT=Production
+              - name: ASPNETCORE_ENVIRONMENT
+                value: Production
             resources:
               limits:
                 cpu: 400m
