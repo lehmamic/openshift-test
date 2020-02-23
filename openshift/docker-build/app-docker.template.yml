@@ -7,6 +7,8 @@ metadata:
 parameters:
 - name: DOCKER_IMAGE_TAG
   required: true
+- name: DOCKER_IMAGE_REPOSITORY
+  required: true
 
 objects:
 
@@ -23,7 +25,7 @@ objects:
     output:
       to:
         kind: DockerImage
-        name: image-registry.openshift-image-registry.svc:5000/devopsfusionleh/demo-app:${DOCKER_IMAGE_TAG}
+        name: image-registry.openshift-image-registry.svc:5000/${DOCKER_IMAGE_REPOSITORY}/demo-app:${DOCKER_IMAGE_TAG}
     runPolicy: Parallel
     resources:
       limits:

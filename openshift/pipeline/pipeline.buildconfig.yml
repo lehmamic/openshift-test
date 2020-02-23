@@ -15,4 +15,6 @@ spec:
         value: "https://github.com/lehmamic/openshift-test"
       - name: "GIT_BRANCH"
         value: "master"
+      - name: OPENSHIFT_NAMESPACE
+        value: devopsfusionleh
     type: JenkinsPipeline

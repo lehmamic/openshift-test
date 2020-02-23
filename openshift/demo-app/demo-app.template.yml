@@ -7,6 +7,8 @@ parameters:
 - name: DOCKER_IMAGE_TAG
   description: The docker image tag of the main container. Gets passed to every template automatically.
   required: true
+- name: DOCKER_IMAGE_REPOSITORY
+  required: true
 
 objects:
 
@@ -25,7 +27,7 @@ objects:
       spec:
         containers:
           - name: demo-app
-            image: image-registry.openshift-image-registry.svc:5000/devopsfusionleh/demo-app:${DOCKER_IMAGE_TAG}
+            image: image-registry.openshift-image-registry.svc:5000/${DOCKER_IMAGE_REPOSITORY}/demo-app:${DOCKER_IMAGE_TAG}
             ports:
               - containerPort: 8080
             env:

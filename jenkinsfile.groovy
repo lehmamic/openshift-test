@@ -27,11 +27,11 @@ podTemplate(label: "dotnet-31",
     node("dotnet-31") {
         stage("checkout") {
           sh 'printenv'
-          // checkout scr
-          git([
-              url:"${GIT_REPO}",
-              branch:"${GIT_BRANCH}"
-          ]) 
+          checkout scr
+        //   git([
+        //       url:"${GIT_REPO}",
+        //       branch:"${GIT_BRANCH}"
+        //   ]) 
         }
 
         stage("gitversion") {
@@ -59,7 +59,7 @@ podTemplate(label: "dotnet-31",
         stage("docker build") {
             openshift.withCluster() {
                 openshift.withProject() {
-                    def objects = openshift.process("-f", "openshift/docker-build/app-docker.template.yml", "-p", "DOCKER_IMAGE_TAG=${artefactVersion}")
+                    def objects = openshift.process("-f", "openshift/docker-build/app-docker.template.yml", "-p", "DOCKER_IMAGE_REPOSITORY=${OPENSHIFT_NAMESPACE}", "-p", "DOCKER_IMAGE_TAG=${artefactVersion}")
                     openshift.apply(objects, "--force")
 
                     openshift.selector("bc", "demo-app-docker").startBuild("--from-archive=demo-app-${artefactVersion}.zip", "--wait")
@@ -70,7 +70,7 @@ podTemplate(label: "dotnet-31",
         stage("deploy") {
             openshift.withCluster() {
                 openshift.withProject() {
-                    def objects = openshift.process("-f", "openshift/demo-app/demo-app.template.yml", "-p", "DOCKER_IMAGE_TAG=${artefactVersion}")
+                    def objects = openshift.process("-f", "openshift/demo-app/demo-app.template.yml", "-p", "DOCKER_IMAGE_REPOSITORY=${OPENSHIFT_NAMESPACE}", "-p", "DOCKER_IMAGE_TAG=${artefactVersion}")
                     openshift.apply(objects, "--force")
 
                     def rm = openshift.selector('dc', "demo-app").rollout()
