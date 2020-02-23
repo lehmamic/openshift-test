@@ -22,16 +22,11 @@ podTemplate(label: "dotnet-31",
                                 ])
             ],
             volumes: [
-                // hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')
             ]) {
     node("dotnet-31") {
         stage("checkout") {
           sh 'printenv'
           checkout scm
-        //   git([
-        //       url:"${GIT_REPO}",
-        //       branch:"${GIT_BRANCH}"
-        //   ]) 
         }
 
         stage("gitversion") {
