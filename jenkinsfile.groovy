@@ -27,7 +27,7 @@ podTemplate(label: "dotnet-31",
     node("dotnet-31") {
         stage("checkout") {
           sh 'printenv'
-          checkout scr
+          checkout scm
         //   git([
         //       url:"${GIT_REPO}",
         //       branch:"${GIT_BRANCH}"
